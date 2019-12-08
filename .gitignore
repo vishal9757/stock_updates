@@ -351,5 +351,8 @@ MigrationBackup/
 .ionide/
 EQ061219.CSV
 
-CSV Files
+#CSV Files
 *.CSV
+
+#ENV files
+*.env

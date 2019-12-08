@@ -1,3 +1,3 @@
-BASE_URL = "https://www.bseindia.com/download/BhavCopy/Equity/EQ"
+BASE_URL = "https://www.bseindia.com/markets/MarketInfo/BhavCopy.aspx"
 
-EXTRACT_FIELDS = ["code", "name", "open", "high", "low", "close"]
+EXTRACT_FIELDS = ["SC_CODE", "SC_NAME", "OPEN", "HIGH", "LOW", "CLOSE"]
