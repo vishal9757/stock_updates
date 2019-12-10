@@ -13,13 +13,6 @@ REDIS_INDEX = 0#os.environ['REDIS_INDEX']
 REDIS_CLIENT = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_INDEX)
 LIST_NAME = "company"#os.environ['LIST_NAME']
 
-
-def get_date():
-    ts = time.time()
-    ts = ts - (24*60*60)
-    date = datetime.utcfromtimestamp(ts).strftime('%d%m%y')
-    return date
-
 def download_file(url):
     response = requests.get(url, stream=True)
     zip = zipfile.ZipFile(StringIO.StringIO(response.content))
@@ -29,6 +22,7 @@ def process_record(doc):
     processed_record = {}
     for field in DOWNLOAD_CONFIG.EXTRACT_FIELDS:
         processed_record[field] = str(doc.get(field, '')).strip()
+    processed_record["GAIN"] = ((float(processed_record["CLOSE"]) - float(processed_record['OPEN']))/float(processed_record['CLOSE']))*100
     return processed_record
 
 def process_file(file_name):
@@ -37,7 +31,7 @@ def process_file(file_name):
     for _index, row in data_frame.iterrows():
         row = row.to_dict()
         processed_record = process_record(row)
-        name =row.get('SC_NAME')
+        name =row.get('SC_NAME', '').strip()
         REDIS_CLIENT.sadd(LIST_NAME, name)
         REDIS_CLIENT.hmset(name, processed_record)
 
