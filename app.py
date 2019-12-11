@@ -21,7 +21,8 @@ class Stock(object):
     @cherrypy.expose
     @cherrypy.tools.json_out()
     def company_stats(self, companyName):
-        return {"Name": companyName, "High": 31, "Low": 20, "Gain": 10}
+        response = service.get_company_stats(companyName)
+        return response
 
 def main():
    # configuration file
@@ -34,10 +35,7 @@ def main():
 
     conf = {"/media": {"tools.staticdir.on": True,
                        "tools.staticdir.dir": os.path.abspath("media"),
-                       },
-            # '/custom_style.css': {'tools.staticfile.on': True,
-            #                       'tools.staticfile.filename': os.path.abspath("./media/custom_style.css"),
-            #                       }
+                       }
             }
     cherrypy.quickstart(Stock(), config=conf)
 

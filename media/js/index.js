@@ -3,7 +3,7 @@ function generateStatsWindow(e){
   axios.get("/company_stats?companyName="+input).then(function(res){
     console.log(res.data);
   })
-  console.log(input)
+  console.table(input)
   e.preventDefault()
   console.log(e)
   return false
@@ -27,7 +27,7 @@ function autocomplete(inp) {
           /*create a DIV element that will contain the items (values):*/
           a = document.createElement("DIV");
           a.setAttribute("id", self.id + "autocomplete-list");
-          console.log(arr);
+          console.table(arr);
           if (arr.length > 0){
             a.setAttribute("class", "autocomplete-items");}
           /*append the DIV element as a child of the autocomplete container:*/
@@ -112,5 +112,26 @@ function autocomplete(inp) {
       closeAllLists(e.target);
   });
 }
-/*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-autocomplete(document.getElementById("myInput"));
+
+function buildTable(data){
+  var element = document.getElementById('modalContent')
+  var table = document.createElement('table')
+  table.className = 'table table-hover'
+  var field = ['Name', 'High', 'Low', 'Gain']
+  var node = document.createElement('thead')
+  table.appendChild(node)
+  var row = document.createElement('tr')
+  node.appendChild(row)
+  for (var key in field){
+    var data = document.createElement('th')
+    row.appendChild(data)
+  }
+  var node = document.createElement('tbody')
+  table.appendChild(node)
+  var row = document.createElement('tr')
+  node.appendChild(row)
+  for (var key in field){
+    var data = document.createElement('td')
+    row.appendChild(data)
+  }
+}
