@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" type="text/css" href="media/custom_style.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" type="application/javascript" ></script>
+</head>
+<body>
+
+
+<p>Search Company:</p>
+
+<!--Make sure the form has the autocomplete function switched off:-->
+<form autocomplete="off" onsubmit="return generateStatsWindow(event)">
+  <div class="autocomplete" style="width:300px;">
+    <input id="myInput" type="text" name="companyName" placeholder="Company">
+  </div>
+  <button class="btn btn-primary" type="submit">Search</button>
+</form>
+<script src="media/index.js"></script>
+<script>
+  autocomplete(document.getElementById("myInput"));
+</script>
+
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <p>This is a small modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>

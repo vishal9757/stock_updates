@@ -1,6 +1,7 @@
 import os
 import redis
-import requests, zipfile, StringIO
+import requests, zipfile
+from io import BytesIO
 from datetime import datetime
 import time
 import pandas as pd
@@ -15,7 +16,7 @@ LIST_NAME = "company"#os.environ['LIST_NAME']
 
 def download_file(url):
     response = requests.get(url, stream=True)
-    zip = zipfile.ZipFile(StringIO.StringIO(response.content))
+    zip = zipfile.ZipFile(BytesIO(response.content))
     zip.extractall()
 
 def process_record(doc):

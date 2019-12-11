@@ -16,6 +16,5 @@ def get_company_suggestions(text):
         resp = REDIS_CLIENT.sscan(LIST_NAME, cursor=cursor, match=text+"*")
         cursor = resp[0]
         result.extend(resp[1])
-        print cursor
     result.sort()
     return result
