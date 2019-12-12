@@ -23,6 +23,12 @@ class Stock(object):
     def company_stats(self, companyName):
         response = service.get_company_stats(companyName)
         return response
+    
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    def sorted_company(self):
+        resp = service.get_sorted_company()
+        return resp
 
 def main():
    # configuration file
