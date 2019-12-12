@@ -1,9 +1,12 @@
 function generateStatsWindow(e){
   var input = document.getElementById('myInput').value
   axios.get("/company_stats?companyName="+input).then(function(res){
-    console.log(res.data);
+    console.log(res.data)
+    setTimeout(function () {
+      buildTable(res.data)
+    }, 1)
   })
-  console.table(input)
+  console.log(input)
   e.preventDefault()
   console.log(e)
   return false
@@ -113,17 +116,19 @@ function autocomplete(inp) {
   });
 }
 
-function buildTable(data){
+function buildTable(responseData){
   var element = document.getElementById('modalContent')
+  element.innerText = ""
   var table = document.createElement('table')
   table.className = 'table table-hover'
-  var field = ['Name', 'High', 'Low', 'Gain']
+  var field = ['SC_NAME', 'HIGH', 'LOW', 'OPEN']
   var node = document.createElement('thead')
   table.appendChild(node)
   var row = document.createElement('tr')
   node.appendChild(row)
   for (var key in field){
     var data = document.createElement('th')
+    data.innerText = field[key]
     row.appendChild(data)
   }
   var node = document.createElement('tbody')
@@ -132,6 +137,9 @@ function buildTable(data){
   node.appendChild(row)
   for (var key in field){
     var data = document.createElement('td')
+    console.log(field[key])
+    data.innerText = responseData[field[key]]
     row.appendChild(data)
   }
+  element.appendChild(table)
 }
