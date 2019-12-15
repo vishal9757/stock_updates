@@ -4,6 +4,7 @@ import os
 import simplejson
 import sys
 import json
+import config
 
 import service
 
@@ -47,17 +48,8 @@ def main():
     Main function to load config of application
     """
    # configuration file
-    # cherrypy.config.update({
-    #     'tools.encode.on': True, 'tools.encode.encoding': 'utf-8',
-    #     'tools.decode.on': True,
-    #     'tools.trailing_slash.on': True,
-    #     'tools.staticdir.root': os.path.abspath(os.path.dirname(__file__)),
-    # })
 
-    conf = {"/media": {"tools.staticdir.on": True,
-                       "tools.staticdir.dir": os.path.abspath("media"),
-                       }
-            }
+    conf = config.APPLICATION_CONFIG
     cherrypy.quickstart(Stock(), config=conf)
 
 

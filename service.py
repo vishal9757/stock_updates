@@ -1,6 +1,6 @@
 import redis
 import copy
-import download_config
+import config
 
 REDIS_HOST = "localhost"#os.environ['REDIS_HOST']
 REDIS_PORT = 6379#os.environ['REDIS_PORT']
@@ -35,10 +35,10 @@ def get_company_stats(text):
         [dict] -- company record
     """
     REDIS_CLIENT = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_INDEX)
-    response = REDIS_CLIENT.hmget(text, download_config.OUTPUT_FIELDS)
+    response = REDIS_CLIENT.hmget(text, config.OUTPUT_FIELDS)
     record = {}
-    for _index in range(len(download_config.OUTPUT_FIELDS)):
-        record[download_config.OUTPUT_FIELDS[_index]] = response[_index]
+    for _index in range(len(config.OUTPUT_FIELDS)):
+        record[config.OUTPUT_FIELDS[_index]] = response[_index]
     return record
 
 def get_sorted_company(key):
@@ -49,7 +49,7 @@ def get_sorted_company(key):
         [list] -- list of sorted record
     """
     REDIS_CLIENT = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_INDEX)
-    key_list = download_config.OUTPUT_FIELDS
+    key_list = config.OUTPUT_FIELDS
     key_list = ['*->'+key for key in key_list]
     if key == 'NAME':
         resp = REDIS_CLIENT.sort(LIST_NAME, desc=True, by="*->"+key, get=key_list, start=0, num=10, alpha=True)
@@ -59,11 +59,11 @@ def get_sorted_company(key):
     count = 0
     record = {}
     for i in range(len(resp)):
-        index = i%len(download_config.OUTPUT_FIELDS)
-        field = download_config.OUTPUT_FIELDS[index]
+        index = i%len(config.OUTPUT_FIELDS)
+        field = config.OUTPUT_FIELDS[index]
         record[field] = resp[i]
         count += 1
-        if count == len(download_config.OUTPUT_FIELDS):
+        if count == len(config.OUTPUT_FIELDS):
             count = 0
             print (record)
             sort_list.append(copy.deepcopy(record))

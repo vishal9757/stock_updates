@@ -10,3 +10,8 @@ FIELD_MAP = {
 OUTPUT_FIELDS = ["CODE", "NAME", "HIGH", "LOW", "OPEN", "CLOSE", "GAIN"]
 
 SORT_KEY = "GAIN"
+
+APPLICATION_CONFIG = {"/media": {"tools.staticdir.on": True,
+                       "tools.staticdir.dir": os.path.abspath("media"),
+                       }
+            }
