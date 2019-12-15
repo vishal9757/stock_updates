@@ -1,11 +1,12 @@
 import redis
 import copy
+import os
 import config
 
-REDIS_HOST = "localhost"#os.environ['REDIS_HOST']
-REDIS_PORT = 6379#os.environ['REDIS_PORT']
-REDIS_INDEX = 0#os.environ['REDIS_INDEX']
-LIST_NAME = "company"#os.environ['LIST_NAME']
+REDIS_HOST = os.environ['REDIS_HOST']
+REDIS_PORT = os.environ['REDIS_PORT']
+REDIS_INDEX = os.environ['REDIS_INDEX']
+LIST_NAME = os.environ['LIST_NAME']
 
 
 def get_company_suggestions(text):
@@ -53,7 +54,7 @@ def get_sorted_company(key):
     key_list = ['*->'+key for key in key_list]
     if key == 'NAME':
         resp = REDIS_CLIENT.sort(LIST_NAME, desc=True, by="*->"+key, get=key_list, start=0, num=10, alpha=True)
-    else:    
+    else:
         resp = REDIS_CLIENT.sort(LIST_NAME, desc=True, by="*->"+key, get=key_list, start=0, num=10)
     sort_list = []
     count = 0

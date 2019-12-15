@@ -1,3 +1,5 @@
+import os
+
 BASE_URL = "https://www.bseindia.com/markets/MarketInfo/BhavCopy.aspx"
 
 EXTRACT_FIELDS = ["SC_CODE", "SC_NAME", "OPEN", "HIGH", "LOW", "CLOSE"]
@@ -12,6 +14,4 @@ OUTPUT_FIELDS = ["CODE", "NAME", "HIGH", "LOW", "OPEN", "CLOSE", "GAIN"]
 SORT_KEY = "GAIN"
 
 APPLICATION_CONFIG = {"/media": {"tools.staticdir.on": True,
-                       "tools.staticdir.dir": os.path.abspath("media"),
-                       }
-            }
+                                 "tools.staticdir.dir": os.path.abspath("media")}}

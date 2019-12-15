@@ -356,3 +356,7 @@ EQ061219.CSV
 
 #ENV files
 *.env
+
+#Docker files
+Dockerfile
+*.yml

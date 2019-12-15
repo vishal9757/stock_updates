@@ -5,8 +5,11 @@ import simplejson
 import sys
 import json
 import config
-
 import service
+
+APP_HOST = os.environ['APP_HOST']
+APP_PORT = os.environ['APP_PORT']
+
 
 class Stock(object):
     @cherrypy.expose
@@ -33,7 +36,7 @@ class Stock(object):
         """
         response = service.get_company_stats(companyName)
         return response
-    
+
     @cherrypy.expose
     @cherrypy.tools.json_out()
     def sorted_company(self, sort):
@@ -43,6 +46,7 @@ class Stock(object):
         resp = service.get_sorted_company(sort)
         return resp
 
+
 def main():
     """
     Main function to load config of application
@@ -50,6 +54,9 @@ def main():
    # configuration file
 
     conf = config.APPLICATION_CONFIG
+    cherrypy.config.update({'server.socket_host': APP_HOST,
+                            'server.socket_port': APP_PORT,
+                            })
     cherrypy.quickstart(Stock(), config=conf)
 
 
