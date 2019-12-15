@@ -1,57 +1,41 @@
 function generateStatsWindow(e){
   var input = document.getElementById('myInput').value
   axios.get("/company_stats?companyName="+input).then(function(res){
-    console.log(res.data)
-    setTimeout(function () {
-      buildTable(res.data)
-    }, 1)
+    if (res.data['NAME'] != null){
+      buildTable([res.data], 'modalContent')
+    }
+    else{
+      buildMessage("No such Company", "modalContent")
+    }
   })
-  console.log(input)
   e.preventDefault()
-  console.log(e)
   return false
 }
 
 function autocomplete(inp) {
-  /*the autocomplete function takes two arguments,
-  the text field element and an array of possible autocompleted values:*/
   var currentFocus;
-  /*execute a function when someone writes in the text field:*/
   inp.addEventListener("input", function(e) {
     var self = this
-      axios.get('/company_suggestions?text='+this.value)
+      axios.get('/company_suggestions?text='+this.value.toUpperCase())
         .then(function(res) {
           var a, b, i, val = self.value;
           var arr = res.data && res.data.companies ? res.data.companies : []
-          /*close any already open lists of autocompleted values*/
           closeAllLists();
           if (!val) { return false;}
           currentFocus = -1;
-          /*create a DIV element that will contain the items (values):*/
           a = document.createElement("DIV");
           a.setAttribute("id", self.id + "autocomplete-list");
-          console.table(arr);
           if (arr.length > 0){
             a.setAttribute("class", "autocomplete-items");}
-          /*append the DIV element as a child of the autocomplete container:*/
           self.parentNode.appendChild(a);
-          /*for each item in the array...*/
           for (i = 0; i < arr.length; i++) {
-            /*check if the item starts with the same letters as the text field value:*/
             if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-              /*create a DIV element for each matching element:*/
               b = document.createElement("DIV");
-              /*make the matching letters bold:*/
               b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
               b.innerHTML += arr[i].substr(val.length);
-              /*insert a input field that will hold the current array item's value:*/
               b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-              /*execute a function when someone clicks on the item value (DIV element):*/
               b.addEventListener("click", function(e) {
-                  /*insert the value for the autocomplete text field:*/
                   inp.value = this.getElementsByTagName("input")[0].value;
-                  /*close the list of autocompleted values,
-                  (or any other open lists of autocompleted values:*/
                   closeAllLists();
               });
               a.appendChild(b);
@@ -59,27 +43,18 @@ function autocomplete(inp) {
           }
         })
   });
-  /*execute a function presses a key on the keyboard:*/
   inp.addEventListener("keydown", function(e) {
       var x = document.getElementById(this.id + "autocomplete-list");
       if (x) x = x.getElementsByTagName("div");
       if (e.keyCode == 40) {
-        /*If the arrow DOWN key is pressed,
-        increase the currentFocus variable:*/
         currentFocus++;
-        /*and and make the current item more visible:*/
         addActive(x);
       } else if (e.keyCode == 38) { //up
-        /*If the arrow UP key is pressed,
-        decrease the currentFocus variable:*/
         currentFocus--;
-        /*and and make the current item more visible:*/
         addActive(x);
       } else if (e.keyCode == 13) {
-        /*If the ENTER key is pressed, prevent the form from being submitted,*/
         e.preventDefault();
         if (currentFocus > -1) {
-          /*and simulate a click on the "active" item:*/
           if (x) x[currentFocus].click();
         }
       }
@@ -116,30 +91,61 @@ function autocomplete(inp) {
   });
 }
 
-function buildTable(responseData){
-  var element = document.getElementById('modalContent')
+function buildTable(responseData, id, click_function){
+  var element = document.getElementById(id)
   element.innerText = ""
   var table = document.createElement('table')
-  table.className = 'table table-hover'
-  var field = ['SC_NAME', 'HIGH', 'LOW', 'OPEN']
+  table.className = 'table table-hover table-bordered'
+  var field = Object.keys(responseData[0])
   var node = document.createElement('thead')
   table.appendChild(node)
   var row = document.createElement('tr')
+  row.onclick = 
   node.appendChild(row)
   for (var key in field){
     var data = document.createElement('th')
-    data.innerText = field[key]
+    data.style = "text-align:center;"
+    if (click_function == true){
+    data.innerHTML = "<b>"+field[key]+"</b> <i class='fa fa-fw fa-sort' onclick=sortedResponse('"+field[key]+"')></i>"
+    }else {
+      data.innerText = field[key]
+    }
+
     row.appendChild(data)
   }
   var node = document.createElement('tbody')
   table.appendChild(node)
-  var row = document.createElement('tr')
-  node.appendChild(row)
-  for (var key in field){
-    var data = document.createElement('td')
-    console.log(field[key])
-    data.innerText = responseData[field[key]]
-    row.appendChild(data)
+  for (row_index in responseData){
+    var row = document.createElement('tr')
+
+    node.appendChild(row)
+    for (var key in field){
+      var data = document.createElement('td')
+      data.style = "text-align: center;"
+      data.innerText = responseData[row_index][field[key]]
+      row.appendChild(data)
+    }
   }
   element.appendChild(table)
+}
+
+function sortedResponse(sortKey){
+  element = document.getElementById('sortTableBlock')
+  meta_element = document.getElementById('sortMeta')
+  meta_element.innerText = ""
+  node = document.createElement('h3')
+  node.innerText = "Sorted Table ("+sortKey+")"
+  meta_element.appendChild(node)
+  axios.get("/sorted_company?sort="+sortKey).then(function(res){
+      buildTable(res.data, 'sortTableBlock', click_function=true)
+  })
+  return false
+}
+
+function buildMessage(message, id){
+  element = document.getElementById(id)
+  element.innerText = ""
+  node = document.createElement('h3')
+  node.innerText = message
+  element.appendChild(node)
 }

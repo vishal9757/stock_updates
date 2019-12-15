@@ -22,7 +22,8 @@ def download_file(url):
 def process_record(doc):
     processed_record = {}
     for field in DOWNLOAD_CONFIG.EXTRACT_FIELDS:
-        processed_record[field] = str(doc.get(field, '')).strip()
+        new_field = DOWNLOAD_CONFIG.FIELD_MAP.get(field, field)
+        processed_record[new_field] = str(doc.get(field, '')).strip()
     processed_record["GAIN"] = ((float(processed_record["CLOSE"]) - float(processed_record['OPEN']))/float(processed_record['CLOSE']))*100
     return processed_record
 
