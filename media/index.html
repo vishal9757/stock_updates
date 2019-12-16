@@ -11,7 +11,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js" type="application/javascript" ></script>
 </head>
 <body style="margin-top:20px;" class="container">
-
+<div style="text-align-last:right;" id="lastDate"></div>
 <div style="display: flex; align-items: center; justify-content: center; flex-direction: column;" class="jumbotron" >
   <p>Search Company</p>
 
@@ -49,6 +49,7 @@
 <div id="sortTableBlock" style="text-align: center;"></div>
 </div>
 <script>
+window.onload = lastUpdatedDate()
 window.onload = sortedResponse("GAIN")
 </script>
 </body>

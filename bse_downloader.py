@@ -26,6 +26,17 @@ def download_file(url):
     zip = zipfile.ZipFile(BytesIO(response.content))
     zip.extractall()
 
+def get_date(file_name):
+    """Function to extract date from file name
+    Arguments:
+        file_name {[str]} -- File name
+    Returns:
+        [str] -- Date
+    """
+    file_name = file_name.replace('EQ','').replace('.CSV','')
+    date = "{0}/{1}/{2}".format(file_name[:2], file_name[2:4], file_name[4:])
+    return date
+
 def process_record(doc):
     """Function to process document get required fields and calculate gain
     Arguments:
@@ -56,7 +67,8 @@ def process_file(file_name):
         print (name)
         REDIS_CLIENT.sadd(LIST_NAME, name)
         REDIS_CLIENT.hmset(name, processed_record)
-
+    file_date = get_date(file_name)
+    REDIS_CLIENT.set("last_updated_date", file_date)
 
 def get_download_url():
     """Function to get download url from homepage

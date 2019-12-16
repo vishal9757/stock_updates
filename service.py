@@ -66,8 +66,11 @@ def get_sorted_company(key):
         count += 1
         if count == len(config.OUTPUT_FIELDS):
             count = 0
-            print (record)
             sort_list.append(copy.deepcopy(record))
             record = {}
-
     return sort_list
+
+def get_last_updated_date():
+    REDIS_CLIENT = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_INDEX)
+    last_updated_date = REDIS_CLIENT.get('last_updated_date')
+    return last_updated_date

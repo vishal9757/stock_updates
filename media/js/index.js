@@ -100,7 +100,6 @@ function buildTable(responseData, id, click_function){
   var node = document.createElement('thead')
   table.appendChild(node)
   var row = document.createElement('tr')
-  row.onclick = 
   node.appendChild(row)
   for (var key in field){
     var data = document.createElement('th')
@@ -148,4 +147,12 @@ function buildMessage(message, id){
   node = document.createElement('h3')
   node.innerText = message
   element.appendChild(node)
+}
+
+function lastUpdatedDate(){
+  var input = document.getElementById('lastDate')
+  axios.get("/last_updated_date").then(function(res){
+    input.innerHTML = "<p>Stats as on "+res.data+"</p>"
+  })
+  return false
 }

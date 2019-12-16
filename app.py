@@ -8,7 +8,7 @@ import config
 import service
 
 APP_HOST = os.environ['APP_HOST']
-APP_PORT = os.environ['APP_PORT']
+APP_PORT = int(os.environ['APP_PORT'])
 
 
 class Stock(object):
@@ -34,6 +34,7 @@ class Stock(object):
         """
         Endpoint to get company stats
         """
+        print (companyName)
         response = service.get_company_stats(companyName)
         return response
 
@@ -44,6 +45,15 @@ class Stock(object):
         Endpoint to get sorted company based on given key
         """
         resp = service.get_sorted_company(sort)
+        return resp
+
+    @cherrypy.expose
+    @cherrypy.tools.json_out()
+    def last_updated_date(self):
+        """
+        Endpoint to get last date when file is processed
+        """
+        resp = service.get_last_updated_date()
         return resp
 
 
